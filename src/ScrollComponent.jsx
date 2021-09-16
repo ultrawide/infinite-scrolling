@@ -11,17 +11,6 @@ class ScrollComponent extends React.Component {
         }
     }
 
-    handleObserver(entities, observer) {
-        const y = entities[0].boundingClientRect.y;
-        if (this.state.prevY > y) {
-            const lastPhoto = this.state.photos[this.state.photos.length - 1];
-            const curPage = lastPhoto.albumId;
-            this.getPhotos(curPage);
-            this.setState({ page: curPage });
-        }
-        this.setState({ prevY: y });
-    }
-
     getPhotos(page) {
         this.setState({ loading: true });
         fetch(`https://jsonplaceholder.typicode.com/photos?_page=${page}&_limit=10`)
@@ -49,7 +38,16 @@ class ScrollComponent extends React.Component {
         this.observer.observe(this.loadingRef);
     }
 
-
+    handleObserver(entities) {
+        const y = entities[0].boundingClientRect.y;
+        if (this.state.prevY > y) {
+            const lastPhoto = this.state.photos[this.state.photos.length - 1];
+            const curPage = lastPhoto.albumId;
+            this.getPhotos(curPage);
+            this.setState({ page: curPage });
+        }
+        this.setState({ prevY: y });
+    }
 
     render() {
         // To change the loading icon behavior
